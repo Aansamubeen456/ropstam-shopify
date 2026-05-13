@@ -1,0 +1,53 @@
+/* Hide anything we missed via JS */
+variant-selector {
+  display: none !important;
+}
+
+/* Custom options container */
+.curtain-custom-options {
+  margin: 16px 0 24px 0;
+}
+
+.curtain-option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 14px 0;
+}
+
+.curtain-option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  min-width: 80px;
+}
+
+.curtain-select {
+  flex: 1;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  color: #333;
+  padding: 8px 12px;
+  cursor: pointer;
+  outline: none;
+  max-width: 200px;
+}
+
+.curtain-select:focus {
+  border-color: #333;
+}
+
+@media (max-width: 768px) {
+  .curtain-option-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .curtain-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}

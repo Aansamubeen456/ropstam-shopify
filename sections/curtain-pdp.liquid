@@ -1,0 +1,22 @@
+{% comment %} Curtain PDP Logic Section — renders no visible HTML itself {% endcomment %}
+
+<div id="curtain-pdp-root" style="display:none;">
+  <script>
+    window.curtainData = {
+      widthPanelMap: {{ product.metafields.custom.width_panel_map.value | json }},
+      pricingTable:  {{ product.metafields.custom.pricing_table.value | json }},
+      availableWidths: {{ product.metafields.custom.available_widths.value | json }},
+      variants: {{ product.variants | json }}
+    };
+  </script>
+</div>
+
+{{ 'curtain-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'curtain-pdp.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Curtain PDP Logic",
+  "settings": []
+}
+{% endschema %}
