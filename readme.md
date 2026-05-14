@@ -9,6 +9,7 @@ A custom Product Detail Page (PDP) built for a curtain product on Shopify. The P
 ## Live Demo
 
 > https://aansa-mubeen.myshopify.com/products/london-curtain
+> store password:pakistan
 
 ---
 
