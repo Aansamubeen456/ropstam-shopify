@@ -86,6 +86,41 @@
     }
 
     // ── 5. Dynamic price update ──
+    // Store base unit price so quantity multiplier can be applied
+    let basePrice = 0;
+
+    function getQuantity() {
+      const qtyInput = document.querySelector('input[name="quantity"]');
+      if (qtyInput) {
+        const val = parseInt(qtyInput.value, 10);
+        return isNaN(val) || val < 1 ? 1 : val;
+      }
+      return 1;
+    }
+
+    function updateButtonLabel() {
+      if (basePrice === 0) return;
+      const qty = getQuantity();
+      const total = basePrice * qty;
+      const formatted = `Rs.${total.toFixed(2)}`;
+
+      // Update only the text span inside the button — do NOT use textContent
+      // as that would wipe out the icon and "Added" span HTML structure.
+      document.querySelectorAll(
+        '[name="add"], .product-form__submit, button[type="submit"]'
+      ).forEach(btn => {
+        if (btn.closest('form[action*="/cart/add"], product-form, .product-form')) {
+          const textSpan = btn.querySelector('.add-to-cart-text__content');
+          if (textSpan) {
+            textSpan.textContent = `${formatted} — Add to Cart`;
+          } else {
+            // Fallback: button hasn't been enhanced yet, set textContent
+            btn.textContent = `${formatted} — Add to Cart`;
+          }
+        }
+      });
+    }
+
     function updatePrice() {
       const widthEl = document.getElementById('curtain-width');
       const dropEl  = document.getElementById('curtain-drop');
@@ -110,23 +145,19 @@
         return;
       }
 
-      const formatted = `Rs.${parseFloat(price).toFixed(2)}`;
+      // Store base unit price
+      basePrice = parseFloat(price);
+      const formatted = `Rs.${basePrice.toFixed(2)}`;
 
-      // Update ALL price elements on page
+      // Update ALL price elements on page (unit price display)
       document.querySelectorAll(
         '.price-item--regular, .price__regular .money, .price .money, [class*="price-item"]'
       ).forEach(el => {
         el.textContent = formatted;
       });
 
-      // Update Add to Cart button
-      document.querySelectorAll(
-        '[name="add"], .product-form__submit, button[type="submit"]'
-      ).forEach(btn => {
-        if (btn.closest('form[action*="/cart/add"], product-form, .product-form')) {
-          btn.textContent = `${formatted} — Add to Cart`;
-        }
-      });
+      // Update button label with quantity-aware total
+      updateButtonLabel();
 
       // ── 6. Set correct variant ID for cart submission ──
       const panelLabel = `${panels} Panel${panels > 1 ? 's' : ''}`;
@@ -147,10 +178,30 @@
       }
     }
 
-    // ── 7. Listen for changes on our custom selectors ──
+    // ── 7. Listen for changes on Width/Drop selectors ──
     document.addEventListener('change', function (e) {
       if (e.target.id === 'curtain-width' || e.target.id === 'curtain-drop') {
         updatePrice();
+      }
+    });
+
+    // ── 8. Listen for quantity changes (input + +/- button clicks) ──
+    document.addEventListener('change', function (e) {
+      if (e.target.name === 'quantity') {
+        updateButtonLabel();
+      }
+    });
+    document.addEventListener('input', function (e) {
+      if (e.target.name === 'quantity') {
+        updateButtonLabel();
+      }
+    });
+    // The quantity +/- buttons update the input value then trigger click;
+    // use a small delay so the input value has already been updated.
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest('button[name="plus"], button[name="minus"]');
+      if (btn && btn.closest('quantity-selector-component')) {
+        setTimeout(updateButtonLabel, 50);
       }
     });
 

@@ -1,4 +1,13 @@
-{% comment %} Curtain PDP Logic Section — renders no visible HTML itself {% endcomment %}
+
+{% comment %} Critical: hide native variant picker BEFORE paint to prevent flash {% endcomment %}
+{% style %}
+  variant-picker,
+  variant-picker fieldset,
+  variant-picker .variant-option,
+  .variant-picker {
+    display: none !important;
+  }
+{% endstyle %}
 
 <div id="curtain-pdp-root" style="display:none;">
   <script>

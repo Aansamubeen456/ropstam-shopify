@@ -1,5 +1,10 @@
-/* Hide anything we missed via JS */
-variant-selector {
+
+variant-picker,
+variant-picker fieldset,
+variant-picker .variant-option,
+variant-picker .variant-option--buttons,
+variant-picker .variant-option--dropdowns,
+.variant-picker {
   display: none !important;
 }
 
